@@ -171,7 +171,7 @@ ConfigurationOfImageWorker >> fuelMetalevel: spec [
 		spec 
 			repository: 'http://ss3.gemstone.com/ss/Fuel';
 			className: 'ConfigurationOfFuel';
-			version: #stable ].
+			loads: #FuelMetalevel ].
 ]
 
 { #category : #accessing }
