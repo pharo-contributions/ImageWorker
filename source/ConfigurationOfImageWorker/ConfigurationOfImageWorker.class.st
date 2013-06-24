@@ -106,7 +106,8 @@ ConfigurationOfImageWorker >> baseline101: spec [
 			seamless: spec.
 			
 		spec
-			package:  'ImageWorker'.
+			package:  'ImageWorker' with: [ 
+				spec requires: #('Seamless')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
@@ -130,7 +131,8 @@ ConfigurationOfImageWorker >> development102: spec [
 		spec repository: 'http://smalltalkhub.com/mc/PharoExtras/ImageWorker/main'.
 		
 		spec
-			package:  'ImageWorker'.
+			package:  'ImageWorker' with: [ 
+				spec requires: #('Seamless')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
@@ -160,7 +162,7 @@ ConfigurationOfImageWorker >> project [
 
 { #category : #'as yet unclassified' }
 ConfigurationOfImageWorker >> seamless: spec [
-
+	
 	"Dependencies"
 	spec project: 'Seamless' with: [
 		spec
