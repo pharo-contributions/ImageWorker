@@ -254,8 +254,8 @@ ImageWorker >> remotePort: anObject [
 
 { #category : #'image-creation' }
 ImageWorker >> removeForkedImageFiles [
-	self temporaryChangesFile ensureDeleted.
-	self temporaryImageFile ensureDeleted.	
+	self temporaryChangesFile ensureDelete.
+	self temporaryImageFile ensureDelete.	
 ]
 
 { #category : #'image-evaluation' }
