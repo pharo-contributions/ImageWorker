@@ -108,7 +108,7 @@ ConfigurationOfImageWorker >> baseline101: spec [
 			
 		spec
 			package:  'ImageWorker' with: [ 
-				spec requires: #('Seamless' 'CommandShell')].
+				spec requires: #('Seamless' 'FuelMetalevel' 'CommandShell')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
@@ -146,7 +146,7 @@ ConfigurationOfImageWorker >> development102: spec [
 			
 		spec
 			package:  'ImageWorker' with: [ 
-				spec requires: #('Seamless' 'CommandShell')].
+				spec requires: #('Seamless' 'FuelMetalevel' 'CommandShell')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
@@ -159,6 +159,17 @@ ConfigurationOfImageWorker >> development: spec [
 	
 	spec for: #'common' version: 'dev'.
 
+]
+
+{ #category : #'as yet unclassified' }
+ConfigurationOfImageWorker >> fuelMetalevel: spec [
+
+	"Dependencies"
+	spec project: 'FuelMetalevel' with: [
+		spec 
+			repository: 'http://ss3.gemstone.com/ss/Fuel';
+			className: 'ConfigurationOfFuel';
+			loads: #FuelMetalevel ].
 ]
 
 { #category : #accessing }
@@ -201,7 +212,7 @@ ConfigurationOfImageWorker >> version101: spec [
 		spec repository: 'http://smalltalkhub.com/mc/PharoExtras/ImageWorker/main'.
 	
 		spec
-			package:  'ImageWorker' with: 'ImageWorker-ErwanDouaille.1'].
+			package:  'ImageWorker' with: 'ImageWorker-ErwanDouaille.2'].
 ]
 
 { #category : #versions }
@@ -213,7 +224,7 @@ ConfigurationOfImageWorker >> versionDevelopment: spec [
 		spec repository: 'http://smalltalkhub.com/mc/PharoExtras/ImageWorker/main'.
 	
 		spec
-			package:  'ImageWorker' with: 'ImageWorker-ErwanDouaille.1'].
+			package:  'ImageWorker' with: 'ImageWorker-ErwanDouaille.2'].
 ]
 
 { #category : #'as yet unclassified' }
