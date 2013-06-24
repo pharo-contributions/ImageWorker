@@ -103,11 +103,12 @@ ConfigurationOfImageWorker >> baseline101: spec [
 		spec repository: 'http://smalltalkhub.com/mc/PharoExtras/ImageWorker/main'.
 		
 		self 
-			seamless: spec.
+			seamless: spec;
+			commandShell: spec.
 			
 		spec
 			package:  'ImageWorker' with: [ 
-				spec requires: #('Seamless')].
+				spec requires: #('Seamless' 'CommandShell')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
@@ -122,6 +123,15 @@ ConfigurationOfImageWorker >> bleedingEdge: spec [
 ]
 
 { #category : #'as yet unclassified' }
+ConfigurationOfImageWorker >> commandShell: spec [
+	spec project: 'CommandShell' with: [
+		spec
+			repository: 'http://www.squeaksource.com/MetacelloRepository';
+			className: 'ConfigurationOfCommandShell';
+			version: #stable ].
+]
+
+{ #category : #'as yet unclassified' }
 ConfigurationOfImageWorker >> development102: spec [
 	<version: '1.02-development'>
 
@@ -130,16 +140,20 @@ ConfigurationOfImageWorker >> development102: spec [
 		spec blessing: #baseline.
 		spec repository: 'http://smalltalkhub.com/mc/PharoExtras/ImageWorker/main'.
 		
+		self
+			seamless: spec;
+			commandShell: spec.
+			
 		spec
 			package:  'ImageWorker' with: [ 
-				spec requires: #('Seamless')].
+				spec requires: #('Seamless' 'CommandShell')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
 			group: 'full' with: #('ImageWorker')].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ConfigurationOfImageWorker >> development: spec [
 	<symbolicVersion: #development >
 	
@@ -147,7 +161,7 @@ ConfigurationOfImageWorker >> development: spec [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ConfigurationOfImageWorker >> project [
 
 	^ project ifNil: [ | constructor |
@@ -170,7 +184,7 @@ ConfigurationOfImageWorker >> seamless: spec [
 			className: 'ConfigurationOfSeamless'].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #tags }
 ConfigurationOfImageWorker >> stable: spec [
 	<symbolicVersion: #stable >
 	
@@ -190,7 +204,7 @@ ConfigurationOfImageWorker >> version101: spec [
 			package:  'ImageWorker' with: 'ImageWorker-ErwanDouaille.1'].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #versions }
 ConfigurationOfImageWorker >> versionDevelopment: spec [
 	<version: 'dev' imports: #('1.02-development')>
 
