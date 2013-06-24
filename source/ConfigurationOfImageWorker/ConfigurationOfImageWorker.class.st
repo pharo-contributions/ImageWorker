@@ -171,7 +171,7 @@ ConfigurationOfImageWorker >> fuelMetalevel: spec [
 		spec 
 			repository: 'http://ss3.gemstone.com/ss/Fuel';
 			className: 'ConfigurationOfFuel';
-			loads: #FuelMetalevel ].
+			version: #stable ].
 ]
 
 { #category : #accessing }
@@ -214,7 +214,7 @@ ConfigurationOfImageWorker >> version101: spec [
 		spec repository: 'http://smalltalkhub.com/mc/PharoExtras/ImageWorker/main'.
 	
 		spec
-			package:  'ImageWorker' with: 'ImageWorker-ErwanDouaille.2'].
+			package:  'ImageWorker' with: 'ImageWorker-ErwanDouaille.3'].
 ]
 
 { #category : #versions }
@@ -226,7 +226,7 @@ ConfigurationOfImageWorker >> versionDevelopment: spec [
 		spec repository: 'http://smalltalkhub.com/mc/PharoExtras/ImageWorker/main'.
 	
 		spec
-			package:  'ImageWorker' with: 'ImageWorker-ErwanDouaille.2'].
+			package:  'ImageWorker' with: 'ImageWorker-ErwanDouaille.3'].
 ]
 
 { #category : #'as yet unclassified' }
