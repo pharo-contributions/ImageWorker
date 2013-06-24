@@ -104,6 +104,7 @@ ConfigurationOfImageWorker >> baseline101: spec [
 		
 		self 
 			seamless: spec;
+			fuelMetalevel: spec;
 			commandShell: spec.
 			
 		spec
@@ -142,6 +143,7 @@ ConfigurationOfImageWorker >> development102: spec [
 		
 		self
 			seamless: spec;
+			fuelMetalevel: spec;
 			commandShell: spec.
 			
 		spec
