@@ -104,8 +104,8 @@ ConfigurationOfImageWorker >> baseline101: spec [
 		
 		self 
 			seamless: spec;
-			fuelMetalevel: spec;
-			commandShell: spec.
+	"		fuelMetalevel: spec;
+	"		commandShell: spec.
 			
 		spec
 			package:  'ImageWorker' with: [ 
@@ -143,7 +143,7 @@ ConfigurationOfImageWorker >> development102: spec [
 		
 		self
 			seamless: spec;
-			fuelMetalevel: spec;
+"			fuelMetalevel: spec;"
 			commandShell: spec.
 			
 		spec
