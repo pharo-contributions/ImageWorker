@@ -109,7 +109,7 @@ ConfigurationOfImageWorker >> baseline101: spec [
 			
 		spec
 			package:  'ImageWorker' with: [ 
-				spec requires: #('Seamless' 'FuelMetalevel' 'CommandShell')].
+				spec requires: #('Seamless'  'CommandShell')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
@@ -148,7 +148,7 @@ ConfigurationOfImageWorker >> development102: spec [
 			
 		spec
 			package:  'ImageWorker' with: [ 
-				spec requires: #('Seamless' 'FuelMetalevel' 'CommandShell')].
+				spec requires: #('Seamless'  'CommandShell')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
