@@ -297,12 +297,11 @@ ImageWorker >> terminateActiveProcess [
 	currentProcess := Processor activeProcess.
 
 	[ | queue nextInQueue|
-		"kill the current UI process"
-		[currentProcess terminate] on: Error do: [ :error | ].
+		"suspend the current UI process, terminating it would cause all pending #ensure: blocks to be evaluated which can cause unwanted side-effects"
+		[ currentProcess suspend ] on: Error do: [ :error | ].
 		"process the pending ui messages to make sure we activate the commandline handler!"
 		queue := WorldState deferredUIMessages.
-		[(nextInQueue := queue nextOrNil) isNil] whileFalse: [ nextInQueue value]. 
-		
+		[ (nextInQueue := queue nextOrNil) isNil ] whileFalse: [ nextInQueue value ]. 	
 		semaphore signal.
 	] fork.
 
