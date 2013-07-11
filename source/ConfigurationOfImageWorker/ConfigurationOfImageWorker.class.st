@@ -94,7 +94,7 @@ ConfigurationOfImageWorker class >> validate [
 	^ ((Smalltalk at: #MetacelloToolBox) validateConfiguration: self debug: #() recurse: false) explore
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #baselines }
 ConfigurationOfImageWorker >> baseline101: spec [
 	<version: '1.01-baseline'>
 
@@ -116,14 +116,14 @@ ConfigurationOfImageWorker >> baseline101: spec [
 			group: 'full' with: #('ImageWorker')].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'symbolic versions' }
 ConfigurationOfImageWorker >> bleedingEdge: spec [  
 	<symbolicVersion: #bleedingEdge >
 	
 	spec for: #common version: 'devBleedingEdge'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 ConfigurationOfImageWorker >> commandShell: spec [
 	spec project: 'CommandShell' with: [
 		spec
@@ -132,7 +132,7 @@ ConfigurationOfImageWorker >> commandShell: spec [
 			version: #stable ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'external projects' }
 ConfigurationOfImageWorker >> development102: spec [
 	<version: '1.02-development'>
 
@@ -163,7 +163,7 @@ ConfigurationOfImageWorker >> development: spec [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'external projects' }
 ConfigurationOfImageWorker >> fuelMetalevel: spec [
 
 	"Dependencies"
@@ -187,7 +187,7 @@ ConfigurationOfImageWorker >> project [
 		project ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'external projects' }
 ConfigurationOfImageWorker >> seamless: spec [
 	
 	"Dependencies"
@@ -204,7 +204,7 @@ ConfigurationOfImageWorker >> stable: spec [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #versions }
 ConfigurationOfImageWorker >> version101: spec [
 	<version: '1.01' imports: #('1.01-baseline')>
 
@@ -234,7 +234,7 @@ ConfigurationOfImageWorker >> versionDevelopment: spec [
 			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.5'].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #versions }
 ConfigurationOfImageWorker >> versionDevelopmentBleedingEdge: spec [
 	<version: 'devBleedingEdge' imports: #('1.01-baseline')>
 ]
