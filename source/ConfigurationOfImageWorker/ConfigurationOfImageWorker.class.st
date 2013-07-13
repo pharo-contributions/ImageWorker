@@ -192,7 +192,7 @@ ConfigurationOfImageWorker >> seamless: spec [
 	
 	"Dependencies"
 		spec
-			repository: 'http://ss3.gemstone.com/ss/Seamless';
+			repository: 'http://ss3.gemtalksystems.com/ss/Seamless';
 			package:  'Seamless'  .
 ]
 
