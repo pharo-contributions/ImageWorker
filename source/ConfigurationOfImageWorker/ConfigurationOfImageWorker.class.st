@@ -170,8 +170,7 @@ ConfigurationOfImageWorker >> fuelMetalevel: spec [
 	spec project: 'Fuel' with: [
 		spec 
 			repository: 'http://smalltalkhub.com/Pharo/Fuel/main';
-			className: 'ConfigurationOfFuel';
-			loads: #FuelMetalevel].
+			className: 'ConfigurationOfFuel'].
 ]
 
 { #category : #accessing }
