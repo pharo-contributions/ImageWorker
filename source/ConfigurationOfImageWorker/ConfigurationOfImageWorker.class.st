@@ -167,11 +167,11 @@ ConfigurationOfImageWorker >> development: spec [
 ConfigurationOfImageWorker >> fuelMetalevel: spec [
 
 	"Dependencies"
-	spec project: 'FuelMetalevel' with: [
+	spec project: 'Fuel' with: [
 		spec 
-			repository: 'http://ss3.gemstone.com/ss/Fuel';
+			repository: 'http://smalltalkhub.com/Pharo/Fuel/main';
 			className: 'ConfigurationOfFuel';
-			loads: #FuelMetalevel ].
+			loads: #FuelMetalevel].
 ]
 
 { #category : #accessing }
