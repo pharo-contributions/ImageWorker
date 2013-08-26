@@ -108,12 +108,12 @@ ConfigurationOfImageWorker >> baseline101: spec [
 			commandShell: spec.
 			
 		spec
-			package:  'ImageWorker' with: [ 
+			package: 'ImageWorker' with: [ 
 				spec requires: #('Seamless' 'CommandShell')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
-			group: 'full' with: #('ImageWorker')].
+			group: 'full'    with: #('ImageWorker')].
 ]
 
 { #category : #baselines }
@@ -131,12 +131,12 @@ ConfigurationOfImageWorker >> baselineDevelopment: spec [
 			commandShell: spec.
 			
 		spec
-			package:  'ImageWorker' with: [ 
+			package: 'ImageWorker' with: [ 
 				spec requires: #('Seamless' 'CommandShell')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
-			group: 'full' with: #('ImageWorker')].
+			group: 'full'    with: #('ImageWorker')].
 ]
 
 { #category : #'symbolic versions' }
@@ -215,7 +215,7 @@ ConfigurationOfImageWorker >> version101: spec [
 		ErwanDouaille
 		CamilloBruni"
 		spec
-			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.5'].
+			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.6'].
 ]
 
 { #category : #versions }
