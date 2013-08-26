@@ -116,25 +116,9 @@ ConfigurationOfImageWorker >> baseline101: spec [
 			group: 'full' with: #('ImageWorker')].
 ]
 
-{ #category : #'symbolic versions' }
-ConfigurationOfImageWorker >> bleedingEdge: spec [  
-	<symbolicVersion: #bleedingEdge >
-	
-	spec for: #common version: 'devBleedingEdge'.
-]
-
-{ #category : #accessing }
-ConfigurationOfImageWorker >> commandShell: spec [
-	spec project: 'CommandShell' with: [
-		spec
-			repository: 'http://www.squeaksource.com/MetacelloRepository';
-			className: 'ConfigurationOfCommandShell';
-			version: #stable ].
-]
-
-{ #category : #'external projects' }
-ConfigurationOfImageWorker >> development102: spec [
-	<version: '1.02-development'>
+{ #category : #baselines }
+ConfigurationOfImageWorker >> baselineDevelopment: spec [
+	<version: 'development-baseline'>
 
 
 	spec for: #pharo do: [	
@@ -155,7 +139,23 @@ ConfigurationOfImageWorker >> development102: spec [
 			group: 'full' with: #('ImageWorker')].
 ]
 
-{ #category : #accessing }
+{ #category : #'symbolic versions' }
+ConfigurationOfImageWorker >> bleedingEdge: spec [  
+	<symbolicVersion: #bleedingEdge >
+	
+	spec for: #common version: 'devBleedingEdge'.
+]
+
+{ #category : #'external projects' }
+ConfigurationOfImageWorker >> commandShell: spec [
+	spec project: 'CommandShell' with: [
+		spec
+			repository: 'http://www.squeaksource.com/MetacelloRepository';
+			className: 'ConfigurationOfCommandShell';
+			version: #stable ].
+]
+
+{ #category : #'symbolic versions' }
 ConfigurationOfImageWorker >> development: spec [
 	<symbolicVersion: #development >
 	
@@ -195,7 +195,7 @@ ConfigurationOfImageWorker >> seamless: spec [
 			package:  'Seamless'  .
 ]
 
-{ #category : #tags }
+{ #category : #'symbolic versions' }
 ConfigurationOfImageWorker >> stable: spec [
 	<symbolicVersion: #stable >
 	
@@ -220,7 +220,7 @@ ConfigurationOfImageWorker >> version101: spec [
 
 { #category : #versions }
 ConfigurationOfImageWorker >> versionDevelopment: spec [
-	<version: 'dev' imports: #('1.02-development')>
+	<version: 'dev' imports: #('development-baseline')>
 
 	spec for: #pharo do: [	
 		spec blessing: #development.
@@ -230,10 +230,10 @@ ConfigurationOfImageWorker >> versionDevelopment: spec [
 		ErwanDouaille
 		CamilloBruni"
 		spec
-			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.5'].
+			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.6'].
 ]
 
 { #category : #versions }
 ConfigurationOfImageWorker >> versionDevelopmentBleedingEdge: spec [
-	<version: 'devBleedingEdge' imports: #('1.01-baseline')>
+	<version: 'devBleedingEdge' imports: #('development-baseline')>
 ]
