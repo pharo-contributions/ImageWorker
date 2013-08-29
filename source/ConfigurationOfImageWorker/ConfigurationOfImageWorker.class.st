@@ -215,7 +215,7 @@ ConfigurationOfImageWorker >> version101: spec [
 		ErwanDouaille
 		CamilloBruni"
 		spec
-			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.7'].
+			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.8' ].
 ]
 
 { #category : #versions }
@@ -230,7 +230,7 @@ ConfigurationOfImageWorker >> versionDevelopment: spec [
 		ErwanDouaille
 		CamilloBruni"
 		spec
-			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.7'].
+			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.8' ].
 ]
 
 { #category : #versions }
