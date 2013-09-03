@@ -41,7 +41,8 @@ SeamlessCommandLineHandler >> closeCommunication [
 
 { #category : #'image-communication' }
 SeamlessCommandLineHandler >> initializeCommunication [
-	SeamlessDeamon newDefaultWithGlobalAccess startOn: self localPort 
+	SeamlessDeamon newDefaultWithGlobalAccess startOn: self localPort.
+	SeamlessDeamonManager default exceptionForwarding: true.
 ]
 
 { #category : #accessing }
