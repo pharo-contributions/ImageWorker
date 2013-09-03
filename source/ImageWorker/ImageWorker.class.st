@@ -157,7 +157,7 @@ ImageWorker >> forkedImageName: anObject [
 ImageWorker >> initialize [
 	"Just in case kill any existing Seamless Daemons.."
 	self flag: 'This essentially prevents us from having more than one connection at a time'.
-	SeamlessDeamonManager shutDown.
+	SeamlessDeamonManager shutDown: true.
 	
 	self localPort: self randomPort.
 	VTermOutputDriver stderr red: '<= ', self localPort asString;lf .
