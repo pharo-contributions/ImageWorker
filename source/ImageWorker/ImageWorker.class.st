@@ -1,291 +1,196 @@
 "
-An ImageWorker is the new image forker stuff. It will use Seamless stuff to communicate with the forked image.
+I run a block in a separate image and communicate the value back using OSProcess.
+Exceptions are properly serialized in the remote image and locally resignalled, as if the block were evaluated locally.
 
-Example : 
-
-ImageWorker evaluate: [ 1+2 ].
-
-/_\ WARNING /_\
-
-You have to use asLocalObject !
-Exemple:
-
-ImageWorker evaluate: [ ConfigurationOfCI asLocalObject load ].
-
-ImageWorker evaluate: [ ConfigurationOfCI load ]. Will not work and crash you current image
+Example:
+	CIImageWorkder do: [ 1 + 2 ].
+	CIImageWorker do: [ 1 / 0 ].
 "
 Class {
 	#name : #ImageWorker,
 	#superclass : #Object,
 	#instVars : [
-		'localPort',
-		'remotePort',
-		'forkedImageName',
-		'remote',
+		'timeout',
+		'name',
+		'block',
 		'session',
-		'localServer',
 		'forkedImageProcess'
 	],
 	#category : #ImageWorker
 }
 
-{ #category : #'image-evaluation' }
+{ #category : #api }
 ImageWorker class >> do: aBlock [
-
-	| worker process |
-	
-	worker := self new.
-	process := self newPollProcessFor: worker.
-	worker isForkedImage
-		ifTrue: [ ^ self ].
-		
-	[ 
-		^ aBlock value: worker
-	] ensure: [ 
-		process terminate.
-		worker close ]
-]
-
-{ #category : #'image-evaluation' }
-ImageWorker class >> evaluate: aBlock [
-	self do: [ :worker | ^ worker evaluate: aBlock ].
-]
-
-{ #category : #'image-evaluation' }
-ImageWorker class >> evaluateFromForkedImage: aBlock [	
-	| result |
-	
-	self inform: aBlock asString, ' is currently running.'.
-	
-	[ result := (aBlock asLocalObject value) ] 
-		on: Error do: [ :e |  VTermOutputDriver stderr red: e asString ].
-		
-	^ result
-]
-
-{ #category : #'image-evaluation' }
-ImageWorker class >> newPollProcessFor: worker [
-	"process is usefull to prevent a timeout from Seamless, just in case of."
-	
-	| process |
-	
-	process := [ 
-		[ VTermOutputDriver stderr green: '.'.
-			10 seconds wait.	
-			"send a message over the wire"
-			(worker remote at: #DateAndTime) now
-		] repeat.
-		Processor terminateActive ] forkNamed: 'Seamless Poll Process'.
-		
-	^ process
-]
-
-{ #category : #'image-evaluation' }
-ImageWorker class >> send: aSelector to: aClassName [
-
-	^ self do: [ :worker | ^ worker send: aSelector to: aClassName ].
-]
-
-{ #category : #assertion }
-ImageWorker >> checkFileCreation [
-	
-	self 
-		assert: self temporaryChangesFile exists  
-		description: self temporaryChangesFile basename, ' doesn''t exist'.
-	self 
-		assert: self temporaryImageFile exists 
-		description: self temporaryImageFile basename, ' doesn''t exist'.
-]
-
-{ #category : #'image-communication' }
-ImageWorker >> close [
-	self isForkedImage
-		ifTrue: [ ^ self ].
-	
-	[self closeRemoveImage] fork.
-	2 seconds wait.
-	self 
-		removeForkedImageFiles;
-		closeCommunication
-]
-
-{ #category : #'image-communication' }
-ImageWorker >> closeCommunication [
-	
-	localServer stop.
-]
-
-{ #category : #'image-communication' }
-ImageWorker >> closeRemoveImage [
-	(self remote at:#Smalltalk) snapshot: true andQuit: true.
-]
-
-{ #category : #'image-creation' }
-ImageWorker >> createForkedImage [
-	self createNewImageName.
-	self isForkedImage
-		ifTrue: [ self terminateActiveProcess ]
-		ifFalse: [ self launchNewImage ]
-]
-
-{ #category : #'image-creation' }
-ImageWorker >> createNewImageName [
-	self forkedImageName: (Smalltalk imageFile nextVersion basenameWithoutExtension, '_fork', DateAndTime now asString).
-	session := Smalltalk session.
-	Smalltalk backupTo: self forkedImageName.
-	self checkFileCreation
-]
-
-{ #category : #'image-evaluation' }
-ImageWorker >> evaluate: aBlock [
-	self isForkedImage 
-		ifFalse: [ 
-			^ aBlock value: self remote ]
+	^ self new 
+		block: aBlock;
+		value
 ]
 
 { #category : #accessing }
-ImageWorker >> forkedImageName [
-	^ forkedImageName
+ImageWorker >> baseFile [
+	^ self name asFileReference
 ]
 
 { #category : #accessing }
-ImageWorker >> forkedImageName: anObject [
-	forkedImageName := anObject
+ImageWorker >> block [
+	^ block
 ]
 
-{ #category : #'initialize-release' }
-ImageWorker >> initialize [
-	"Just in case kill any existing Seamless Daemons.."
-	self flag: 'This essentially prevents us from having more than one connection at a time'.
-	SeamlessDeamonManager shutDown: true.
-	
-	self localPort: self randomPort.
-	VTermOutputDriver stderr red: '<= ', self localPort asString;lf .
-	
-	self remotePort: self randomPort.
-	VTermOutputDriver stderr red: '=> ', self remotePort asString;lf.
-	
-	self createForkedImage.
-	VTermOutputDriver stderr red: self forkedImageName asString;lf.
-	
-	self isForkedImage 
-		ifFalse: [ self initializeCommunication ].			
-	
+{ #category : #accessing }
+ImageWorker >> block: aBlock [
+	block := aBlock
 ]
 
-{ #category : #'image-communication' }
-ImageWorker >> initializeCommunication [
-	| remoteAuthority |
-	remoteAuthority := '127.0.0.1:', self remotePort asString.
+{ #category : #'private - cleanup' }
+ImageWorker >> cleanUp [
+	forkedImageProcess isComplete
+		ifFalse: [  forkedImageProcess terminate ].
 	
-	100 timesRepeat:[
-		0.2 seconds wait.
+	self forkedImageFile ensureDelete.
+	self forkedChangesFile ensureDelete.
+	
+	self resultFile ensureDelete.
+]
+
+{ #category : #'private - forked image' }
+ImageWorker >> evaluateBlock [
+	| result isError errorRootContext |
+	self runSafely: [
+		isError := false.
 		[ 
-			self remote: 
-				(self startLocalServer connectOn: remoteAuthority).
-			VTermOutputDriver stdout 
-				green: localServer serverAddress; lf.
-			^ self.
-		] on: Error do: [ :e | ]].
-		
-	Error signal: 'Connection to ', remoteAuthority, ' failed'.
+			errorRootContext := thisContext.
+			result := block value 
+		] on: Error do: [ :error |
+				isError := true.
+				"We do not care about the contexts in between generated by the CIImageWorker"
+				result := error freezeUpTo: errorRootContext ].
+			
+		self serializeResult: result isError: isError ]
 ]
 
-{ #category : #assertion }
+{ #category : #private }
+ImageWorker >> forkImage [
+	self updateSession.
+	"Trying to avoid running any commandline handlers when running the forked image"
+	Smalltalk backupTo: name.
+	VTermOutputDriver stdout red: Smalltalk imageName; lf.
+ 
+]
+
+{ #category : #accessing }
+ImageWorker >> forkedChangesFile [
+	^ self baseFile, Smalltalk image changesSuffix
+]
+
+{ #category : #accessing }
+ImageWorker >> forkedImageCommand [
+	^ Smalltalk vm command, ' "', self forkedImageFile fullName, '" --no-quit'
+]
+
+{ #category : #accessing }
+ImageWorker >> forkedImageFile [
+	^ self baseFile, Smalltalk image imageSuffix
+]
+
+{ #category : #initialize }
+ImageWorker >> initialize [
+
+	super initialize.
+	name := Smalltalk imageFile nextVersion basenameWithoutExtension,'-', Time primUTCMicrosecondsClock asString.
+	timeout := 20 minutes.
+]
+
+{ #category : #testing }
 ImageWorker >> isForkedImage [
-	^ (session = Smalltalk session) not
+	^ session ~~ Smalltalk session
 ]
 
-{ #category : #'image-forking' }
-ImageWorker >> launchNewImage [
-	self isForkedImage 
-		ifFalse: [
-			forkedImageProcess := OSProcess command: 
-				Smalltalk vm command, 
-				' ', 
-				self temporaryImageFile fullName, 
-				' seamless ', 
-				self remotePort asString ]
+{ #category : #accessing }
+ImageWorker >> name [
+	^ name
+]
+
+{ #category : #accessing }
+ImageWorker >> name: anObject [
+	name := anObject
+]
+
+{ #category : #private }
+ImageWorker >> readForkedImageResult [
+	"The result is a serialized Array with the result at the first position, and a boolean to indicate whether the result is an exception or not"
+	| result |
+	self resultFile exists
+		ifFalse: [ 
+			self inform: 'Forked Image did not produce result'.
+			^ Error signal: 'Forked Image did not produce result' ].
+	result := FLMaterializer materializeFromFileNamed: self resultFile fullName.
+	result second 
+		ifTrue: [ self resignalRemoteError: result first ]
+		ifFalse: [ ^ result first ]
+]
+
+{ #category : #private }
+ImageWorker >> remoteErrorRootContext [
+	"Return the context from which a remote error should be thrown"
+	^ (thisContext findContextSuchThat: [ :context |
+		 context method = (self class >> #value) ]) sender
+]
+
+{ #category : #private }
+ImageWorker >> resignalRemoteError: remoteError [
+	"Resignal the remote error as if it were caused in the #value method of the CIImageWorker.
+	Note that the remote image pruned the stack up to the #evaluateBlock method."
+	| signalerContext |
 	
-	"
-	it will not be a forked image since we have seamless comm Unmatched string quote ->andline handlers
-	PipeableOSProcess command: temporaryImageCommand.
-	self waitingForkedImageMessage."
-]
-
-{ #category : #accessing }
-ImageWorker >> localPort [
-	^ localPort
-]
-
-{ #category : #accessing }
-ImageWorker >> localPort: anObject [
-	localPort := anObject
-]
-
-{ #category : #'image-communication' }
-ImageWorker >> randomPort [
-
-	| socket port |
+	signalerContext := self remoteErrorRootContext.
+	"1. reattach the outermost context of the remote error to the current context"
+	remoteError signalerContext bottomContext privSender: signalerContext.
 	
-	socket := Socket newTCP.
-	port := (socket listenOn: 0) port.
-	socket close.
+	"2. Make sure we start the error handler lookup in the current context chain"
+	remoteError privHandlerContext: signalerContext.
 	
-	^ port
+	"3. pass/resignal the remote error"
+	self cleanUp.
+	remoteError pass.
 ]
 
 { #category : #accessing }
-ImageWorker >> remote [
-	^ remote
+ImageWorker >> resultFile [
+	^ name asFileReference, 'fuel'
 ]
 
-{ #category : #accessing }
-ImageWorker >> remote: anObject [
-	remote := anObject
+{ #category : #private }
+ImageWorker >> runForkedImage [
+	[[ self waitForForkedImage ]
+		valueWithin: self timeout onTimeout: [ 
+			Error signal: 'Timeout Occurred' ].
+		^ self readForkedImageResult
+	] ensure: [ self cleanUp ]
 ]
 
-{ #category : #accessing }
-ImageWorker >> remotePort [
-	^ remotePort
+{ #category : #'private - forked image' }
+ImageWorker >> runSafely: aBlock [
+	self inform: 'runSafely:'.
+	"Make sure we can run aBlock without side-effects "
+	[ aBlock ensure: [
+		"Make sure that we always quit the image after running the block and serializing its contents."
+		Smalltalk exitSuccess.
+		Error signal: 'Do not reopen a forked image' ]
+	] fork.
+	"We have to make sure to block the current process to avoid side-effects"
+	self terminateActiveProcess.
 ]
 
-{ #category : #accessing }
-ImageWorker >> remotePort: anObject [
-	remotePort := anObject
+{ #category : #'private - forked image' }
+ImageWorker >> serializeResult: result isError: isError [
+	[
+		{ result. isError } serializeToFileNamed: self resultFile fullName 
+	] on: Error do: [ :error |
+		self inform: 'Could not serialize result ', error messageText.
+		error pass ]
 ]
 
-{ #category : #'image-creation' }
-ImageWorker >> removeForkedImageFiles [
-	self temporaryChangesFile ensureDelete.
-	self temporaryImageFile ensureDelete.	
-]
-
-{ #category : #'image-evaluation' }
-ImageWorker >> send: aSelector to: aClassName [
-	
-	^ ((self remote at:aClassName) perform: aSelector  ) asLocalObject 
-]
-
-{ #category : #'image-communication' }
-ImageWorker >> startLocalServer [
-
-	^ localServer := SeamlessDeamon newDefaultWithGlobalAccess startOn: self localPort 
-]
-
-{ #category : #accessing }
-ImageWorker >> temporaryChangesFile [
-	"return the FileReference to the newly created test image "
-	^ Smalltalk fileForChangesNamed: self forkedImageName 
-]
-
-{ #category : #accessing }
-ImageWorker >> temporaryImageFile [
-	"return the FileReference to the newly created test image "
-	^ Smalltalk fileForImageNamed: self forkedImageName 
-]
-
-{ #category : #'image-creation' }
+{ #category : #'private - forked image' }
 ImageWorker >> terminateActiveProcess [
 	"Terminate the current UI process in the freshly spawned image.
 	This way we can be sure to not have any nast side-effects from the pending stack.
@@ -296,15 +201,55 @@ ImageWorker >> terminateActiveProcess [
 	semaphore := Semaphore new.
 	currentProcess := Processor activeProcess.
 
-	[ | queue nextInQueue|
+	[ 
 		"suspend the current UI process, terminating it would cause all pending #ensure: blocks to be evaluated which can cause unwanted side-effects"
+		self inform: 'terminateActiveProcess'.
 		[ currentProcess suspend ] on: Error do: [ :error | ].
-		"process the pending ui messages to make sure we activate the commandline handler!"
-		queue := WorldState deferredUIMessages.
-		[ (nextInQueue := queue nextOrNil) isNil ] whileFalse: [ nextInQueue value ]. 	
+		WorldState deferredUIMessages flush.
 		semaphore signal.
 	] fork.
 
 	semaphore wait.
 	Error signal: 'Should not get here'
+]
+
+{ #category : #accessing }
+ImageWorker >> timeout [
+	^ timeout
+]
+
+{ #category : #accessing }
+ImageWorker >> timeout: anObject [
+	timeout := anObject asDuration
+]
+
+{ #category : #action }
+ImageWorker >> updateSession [
+	session := Smalltalk session.
+]
+
+{ #category : #action }
+ImageWorker >> value [
+	"Evalute the block for this CIImageWorker in a separate image and returns its result"
+	self forkImage.
+	"This code is run in the forked image (new session) and in the current image (old session)"
+	^ self isForkedImage
+		ifTrue: [ 
+			"In the forked (new session) evaluate the block"
+			self evaluateBlock ]
+		ifFalse: [ 
+			"In the current image (old session) we wait for the forked image to return a result"
+			self runForkedImage ]
+]
+
+{ #category : #private }
+ImageWorker >> waitForForkedImage [
+	| delay |
+	self inform: 'Running: ', self forkedImageCommand.
+	forkedImageProcess := OSProcess command: self forkedImageCommand.
+	delay := 50 milliSeconds asDelay.
+	[ forkedImageProcess isComplete ] whileFalse: [ delay wait ].
+
+	forkedImageProcess succeeded
+		ifFalse: [ Error signal: 'External Image Failed: ', forkedImageProcess exitStatus asString ]
 ]
