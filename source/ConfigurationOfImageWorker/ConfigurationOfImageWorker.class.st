@@ -126,13 +126,12 @@ ConfigurationOfImageWorker >> baselineDevelopment: spec [
 		spec repository: 'http://smalltalkhub.com/mc/PharoExtras/ImageWorker/main'.
 		
 		self
-			seamless: spec;
 			fuelMetalevel: spec;
 			commandShell: spec.
 			
 		spec
 			package: 'ImageWorker' with: [ 
-				spec requires: #('Seamless' 'CommandShell')].
+				spec requires: #('CommandShell')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
@@ -230,7 +229,7 @@ ConfigurationOfImageWorker >> versionDevelopment: spec [
 		ErwanDouaille
 		CamilloBruni"
 		spec
-			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.9' ].
+			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.10' ].
 ]
 
 { #category : #versions }
