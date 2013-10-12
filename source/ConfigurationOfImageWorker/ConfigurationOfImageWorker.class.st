@@ -127,11 +127,11 @@ ConfigurationOfImageWorker >> baselineDevelopment: spec [
 		
 		self
 			fuelMetalevel: spec;
-			commandShell: spec.
+			osProcess: spec.
 			
 		spec
 			package: 'ImageWorker' with: [ 
-				spec requires: #('CommandShell')].
+				spec requires: #('OSProcess')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
@@ -170,6 +170,15 @@ ConfigurationOfImageWorker >> fuelMetalevel: spec [
 		spec 
 			repository: 'http://smalltalkhub.com/Pharo/Fuel/main';
 			className: 'ConfigurationOfFuel'].
+]
+
+{ #category : #'external projects' }
+ConfigurationOfImageWorker >> osProcess: spec [
+	spec project: 'OSProcess' with: [
+		spec
+			repository: 'http://www.squeaksource.com/MetacelloRepository';
+			className: 'ConfigurationOfOSProcess';
+			version: #stable ].
 ]
 
 { #category : #accessing }
