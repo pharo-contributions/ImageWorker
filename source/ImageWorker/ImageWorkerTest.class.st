@@ -1,0 +1,39 @@
+Class {
+	#name : #ImageWorkerTest,
+	#superclass : #TestCase,
+	#category : #ImageWorker
+}
+
+{ #category : #helper }
+ImageWorkerTest >> do: aBlock [
+	| imageWorker |
+	imageWorker := ImageWorker new.
+	imageWorker block: aBlock.
+	
+	^ [[ imageWorker value ]
+		ensure: [ imageWorker cleanUp ]] 
+			valueWithin: 10 seconds 
+			onTimeout: [ 
+				imageWorker cleanUp.
+				Error signal: 'Timeout: Image worker took longer than 10 seconds to complete' ]
+]
+
+{ #category : #tests }
+ImageWorkerTest >> testReturnFloat [
+	self assert: (self do: [1.5]) equals: 1.5.
+]
+
+{ #category : #tests }
+ImageWorkerTest >> testReturnInteger [
+	self assert: (self do: [1]) equals: 1.
+]
+
+{ #category : #tests }
+ImageWorkerTest >> testReturnString [
+	self assert: (self do: ['1.5']) equals: '1.5'.
+]
+
+{ #category : #tests }
+ImageWorkerTest >> testReturnSymbol [
+	self assert: (self do: [#'1.5']) equals: #'1.5'.
+]
