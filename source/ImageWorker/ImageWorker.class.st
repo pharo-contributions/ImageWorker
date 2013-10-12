@@ -73,7 +73,7 @@ ImageWorker >> forkImage [
 	VTermOutputDriver stdout 
 		red: Smalltalk imageName; 
 		lf.
- 
+	NonInteractiveTranscript allInstancesDo: [ :each | each initializeStream ].
 ]
 
 { #category : #accessing }
@@ -89,6 +89,11 @@ ImageWorker >> forkedImageCommand [
 { #category : #accessing }
 ImageWorker >> forkedImageFile [
 	^ self baseFile, Smalltalk image imageSuffix
+]
+
+{ #category : #'as yet unclassified' }
+ImageWorker >> inform: anObject [
+	VTermOutputDriver stderr yellow: anObject asString; lf.
 ]
 
 { #category : #initialize }
