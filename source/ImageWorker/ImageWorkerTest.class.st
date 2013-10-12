@@ -19,6 +19,23 @@ ImageWorkerTest >> do: aBlock [
 ]
 
 { #category : #tests }
+ImageWorkerTest >> testError [
+	self 
+		should: [ self do: [ 1/0 ]]
+		raise: ZeroDivide
+]
+
+{ #category : #tests }
+ImageWorkerTest >> testReturnArray [
+	self assert: (self do: [ {1. 2. 3. 4} ]) equals: {1. 2. 3. 4}.
+]
+
+{ #category : #tests }
+ImageWorkerTest >> testReturnClass [
+	self assert: (self do: [ Class ]) equals: Class.
+]
+
+{ #category : #tests }
 ImageWorkerTest >> testReturnFloat [
 	self assert: (self do: [1.5]) equals: 1.5.
 ]
