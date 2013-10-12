@@ -52,6 +52,7 @@ ImageWorker >> cleanUp [
 { #category : #'private - forked image' }
 ImageWorker >> evaluateBlock [
 	| result isError errorRootContext |
+	self logMethod.
 	self runSafely: [
 		isError := false.
 		[ 
@@ -67,9 +68,13 @@ ImageWorker >> evaluateBlock [
 
 { #category : #private }
 ImageWorker >> forkImage [
+	self logMethod.
 	self updateSession.
 	"Trying to avoid running any commandline handlers when running the forked image"
 	Smalltalk backupTo: self baseFile fullName.
+	FileStream startUp: true.
+	
+	self logMethod.
 	VTermOutputDriver stdout 
 		red: Smalltalk imageName; 
 		lf.
@@ -91,9 +96,9 @@ ImageWorker >> forkedImageFile [
 	^ self baseFile, Smalltalk image imageSuffix
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #logging }
 ImageWorker >> inform: anObject [
-	VTermOutputDriver stderr yellow: anObject asString; lf.
+	VTermOutputDriver stdout yellow: anObject asString; lf.
 ]
 
 { #category : #initialize }
@@ -107,6 +112,11 @@ ImageWorker >> initialize [
 { #category : #testing }
 ImageWorker >> isForkedImage [
 	^ session ~~ Smalltalk session
+]
+
+{ #category : #logging }
+ImageWorker >> logMethod [
+	FileStream stdout nextPutAll: thisContext sender method printString; lf.
 ]
 
 { #category : #accessing }
@@ -160,6 +170,7 @@ ImageWorker >> resultFile [
 
 { #category : #private }
 ImageWorker >> runForkedImage [
+	self logMethod.
 	[[ self waitForForkedImage ]
 		valueWithin: self timeout onTimeout: [ 
 			Error signal: 'Timeout Occurred' ].
@@ -229,6 +240,7 @@ ImageWorker >> updateSession [
 
 { #category : #action }
 ImageWorker >> value [
+	self logMethod.
 	"Evalute the block for this CIImageWorker in a separate image and returns its result"
 	self forkImage.
 	"This code is run in the forked image (new session) and in the current image (old session)"
@@ -244,6 +256,7 @@ ImageWorker >> value [
 { #category : #private }
 ImageWorker >> waitForForkedImage [
 	| delay |
+	self logMethod.
 	self inform: 'Running: ', self forkedImageCommand.
 	forkedImageProcess := OSProcess command: self forkedImageCommand.
 	delay := 50 milliSeconds asDelay.
