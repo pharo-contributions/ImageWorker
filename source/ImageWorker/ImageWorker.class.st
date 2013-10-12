@@ -11,7 +11,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'timeout',
-		'name',
+		'baseFile',
 		'block',
 		'session',
 		'forkedImageProcess'
@@ -28,7 +28,7 @@ ImageWorker class >> do: aBlock [
 
 { #category : #accessing }
 ImageWorker >> baseFile [
-	^ self name asFileReference
+	^ baseFile
 ]
 
 { #category : #accessing }
@@ -46,10 +46,7 @@ ImageWorker >> cleanUp [
 	forkedImageProcess isComplete
 		ifFalse: [  forkedImageProcess terminate ].
 	
-	self forkedImageFile ensureDelete.
-	self forkedChangesFile ensureDelete.
-	
-	self resultFile ensureDelete.
+	self baseFile parent deleteAll.
 ]
 
 { #category : #'private - forked image' }
@@ -72,8 +69,10 @@ ImageWorker >> evaluateBlock [
 ImageWorker >> forkImage [
 	self updateSession.
 	"Trying to avoid running any commandline handlers when running the forked image"
-	Smalltalk backupTo: name.
-	VTermOutputDriver stdout red: Smalltalk imageName; lf.
+	Smalltalk backupTo: self baseFile fullName.
+	VTermOutputDriver stdout 
+		red: Smalltalk imageName; 
+		lf.
  
 ]
 
@@ -96,7 +95,7 @@ ImageWorker >> forkedImageFile [
 ImageWorker >> initialize [
 
 	super initialize.
-	name := Smalltalk imageFile nextVersion basenameWithoutExtension,'-', Time primUTCMicrosecondsClock asString.
+	baseFile :=  Time primUTCMicrosecondsClock  asString asFileReference / Smalltalk imageFile nextVersion basenameWithoutExtension.
 	timeout := 20 minutes.
 ]
 
@@ -107,12 +106,7 @@ ImageWorker >> isForkedImage [
 
 { #category : #accessing }
 ImageWorker >> name [
-	^ name
-]
-
-{ #category : #accessing }
-ImageWorker >> name: anObject [
-	name := anObject
+	^ baseFile basename
 ]
 
 { #category : #private }
@@ -156,7 +150,7 @@ ImageWorker >> resignalRemoteError: remoteError [
 
 { #category : #accessing }
 ImageWorker >> resultFile [
-	^ name asFileReference, 'fuel'
+	^ self baseFile, 'fuel'
 ]
 
 { #category : #private }
