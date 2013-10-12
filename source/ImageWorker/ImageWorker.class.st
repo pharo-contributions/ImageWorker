@@ -43,8 +43,8 @@ ImageWorker >> block: aBlock [
 
 { #category : #'private - cleanup' }
 ImageWorker >> cleanUp [
-	forkedImageProcess isComplete
-		ifFalse: [  forkedImageProcess terminate ].
+	(forkedImageProcess isNotNil and: [ forkedImageProcess isComplete not ])
+		ifTrue: [  forkedImageProcess terminate ].
 	
 	self baseFile parent deleteAll.
 ]
