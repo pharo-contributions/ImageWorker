@@ -46,13 +46,13 @@ ImageWorker >> cleanUp [
 	(forkedImageProcess isNotNil and: [ forkedImageProcess isComplete not ])
 		ifTrue: [  forkedImageProcess terminate ].
 	
-	self baseFile parent deleteAll.
+	self baseFile parent exists ifTrue: [
+		self baseFile parent deleteAll ].
 ]
 
 { #category : #'private - forked image' }
 ImageWorker >> evaluateBlock [
 	| result isError errorRootContext |
-	self logMethod.
 	self runSafely: [
 		isError := false.
 		[ 
@@ -68,13 +68,10 @@ ImageWorker >> evaluateBlock [
 
 { #category : #private }
 ImageWorker >> forkImage [
-	self logMethod.
 	self updateSession.
 	"Trying to avoid running any commandline handlers when running the forked image"
 	Smalltalk backupTo: self baseFile fullName.
-	FileStream startUp: true.
 	
-	self logMethod.
 	VTermOutputDriver stdout 
 		red: Smalltalk imageName; 
 		lf.
@@ -98,7 +95,9 @@ ImageWorker >> forkedImageFile [
 
 { #category : #logging }
 ImageWorker >> inform: anObject [
-	VTermOutputDriver stdout yellow: anObject asString; lf.
+	VTermOutputDriver stdout 
+		yellow: anObject asString;
+		lf.
 ]
 
 { #category : #initialize }
