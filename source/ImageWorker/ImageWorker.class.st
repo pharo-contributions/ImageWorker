@@ -113,11 +113,6 @@ ImageWorker >> isForkedImage [
 	^ session ~~ Smalltalk session
 ]
 
-{ #category : #logging }
-ImageWorker >> logMethod [
-	FileStream stdout nextPutAll: thisContext sender method printString; lf.
-]
-
 { #category : #accessing }
 ImageWorker >> name [
 	^ baseFile basename
@@ -128,8 +123,7 @@ ImageWorker >> readForkedImageResult [
 	"The result is a serialized Array with the result at the first position, and a boolean to indicate whether the result is an exception or not"
 	| result |
 	self resultFile exists
-		ifFalse: [ 
-			self inform: 'Forked Image did not produce result'.
+		ifFalse: [
 			^ Error signal: 'Forked Image did not produce result' ].
 	result := FLMaterializer materializeFromFileNamed: self resultFile fullName.
 	result second 
@@ -169,7 +163,6 @@ ImageWorker >> resultFile [
 
 { #category : #private }
 ImageWorker >> runForkedImage [
-	self logMethod.
 	[[ self waitForForkedImage ]
 		valueWithin: self timeout onTimeout: [ 
 			Error signal: 'Timeout Occurred' ].
@@ -179,7 +172,6 @@ ImageWorker >> runForkedImage [
 
 { #category : #'private - forked image' }
 ImageWorker >> runSafely: aBlock [
-	self inform: 'runSafely:'.
 	"Make sure we can run aBlock without side-effects "
 	[ aBlock ensure: [
 		"Make sure that we always quit the image after running the block and serializing its contents."
@@ -212,7 +204,6 @@ ImageWorker >> terminateActiveProcess [
 
 	[ 
 		"suspend the current UI process, terminating it would cause all pending #ensure: blocks to be evaluated which can cause unwanted side-effects"
-		self inform: 'terminateActiveProcess'.
 		[ currentProcess suspend ] on: Error do: [ :error | ].
 		WorldState deferredUIMessages flush.
 		semaphore signal.
@@ -239,7 +230,6 @@ ImageWorker >> updateSession [
 
 { #category : #action }
 ImageWorker >> value [
-	self logMethod.
 	"Evalute the block for this CIImageWorker in a separate image and returns its result"
 	self forkImage.
 	"This code is run in the forked image (new session) and in the current image (old session)"
@@ -255,7 +245,6 @@ ImageWorker >> value [
 { #category : #private }
 ImageWorker >> waitForForkedImage [
 	| delay |
-	self logMethod.
 	self inform: 'Running: ', self forkedImageCommand.
 	forkedImageProcess := OSProcess command: self forkedImageCommand.
 	delay := 50 milliSeconds asDelay.
