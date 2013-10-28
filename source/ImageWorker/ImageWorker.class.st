@@ -71,10 +71,6 @@ ImageWorker >> forkImage [
 	self updateSession.
 	"Trying to avoid running any commandline handlers when running the forked image"
 	Smalltalk backupTo: self baseFile fullName.
-	
-	VTermOutputDriver stdout 
-		red: Smalltalk imageName; 
-		lf.
 	NonInteractiveTranscript allInstancesDo: [ :each | each initializeStream ].
 ]
 
@@ -120,7 +116,7 @@ ImageWorker >> name [
 
 { #category : #private }
 ImageWorker >> readForkedImageResult [
-	"The result is a serialized Array with the result at the first position, and a boolean to indicate whether the result is an exception or not"
+	"The result is a serialized Array with the result at the first position, and a boolean to indicate whether the result is an exception or not."
 	| result |
 	self resultFile exists
 		ifFalse: [
@@ -245,7 +241,7 @@ ImageWorker >> value [
 { #category : #private }
 ImageWorker >> waitForForkedImage [
 	| delay |
-	self inform: 'Running: ', self forkedImageCommand.
+	
 	forkedImageProcess := OSProcess command: self forkedImageCommand.
 	delay := 50 milliSeconds asDelay.
 	[ forkedImageProcess isComplete ] whileFalse: [ delay wait ].
