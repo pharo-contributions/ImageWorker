@@ -109,7 +109,7 @@ ConfigurationOfImageWorker >> baseline101: spec [
 			
 		spec
 			package: 'ImageWorker' with: [ 
-				spec requires: #('CommandShell')].
+				spec requires: #('CommandShell' 'FuelMetalevel')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
@@ -131,7 +131,7 @@ ConfigurationOfImageWorker >> baselineDevelopment: spec [
 			
 		spec
 			package: 'ImageWorker' with: [ 
-				spec requires: #('OSProcess')].
+				spec requires: #('OSProcess' 'FuelMetalevel')].
 			
 		spec 
 			group: 'default' with: #('ImageWorker');
@@ -166,7 +166,7 @@ ConfigurationOfImageWorker >> development: spec [
 ConfigurationOfImageWorker >> fuelMetalevel: spec [
 
 	"Dependencies"
-	spec project: 'Fuel' with: [
+	spec project: 'FuelMetalevel' with: [
 		spec 
 			repository: 'http://smalltalkhub.com/Pharo/Fuel/main';
 			className: 'ConfigurationOfFuel';
