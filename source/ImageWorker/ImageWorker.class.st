@@ -214,17 +214,18 @@ ImageWorker >> runSafely: aBlock [
 
 { #category : #'private - forked image' }
 ImageWorker >> serialize: anObject [
-	| serializer |
+	| serializer newClasses |
 	
 	self resultFile ensureDelete.
+	newClasses := self newlyAddedBehaviors.
 	
 	"use a custom serializer that also serializes newly created classes"
 	serializer := FLSerializer newDefault.
-	self inform: self newlyAddedBehaviors.
+	self inform: newClasses.
 	serializer analyzer 
-		considerInternalAllBehaviors: self newlyAddedBehaviors.
+		considerInternalAllBehaviors: newClasses.
 	serializer
-		serialize: anObject
+		serialize: anObject, newClasses
 		toFileNamed: self resultFile fullName.
 	
 ]
