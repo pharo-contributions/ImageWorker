@@ -14,7 +14,8 @@ Class {
 		'baseFile',
 		'block',
 		'session',
-		'forkedImageProcess'
+		'forkedImageProcess',
+		'systemGlobals'
 	],
 	#category : #ImageWorker
 }
@@ -53,6 +54,7 @@ ImageWorker >> cleanUp [
 { #category : #'private - forked image' }
 ImageWorker >> evaluateBlock [
 	| result isError errorRootContext |
+	self recordSystemGlobals.
 	self runSafely: [
 		isError := false.
 		[ 
@@ -128,6 +130,18 @@ ImageWorker >> name [
 	^ baseFile basename
 ]
 
+{ #category : #'private - forked image' }
+ImageWorker >> newlyAddedBehaviors [
+	"Return the newly added globals since the last #recordSystemGlobals call"
+	^  self newlyAddedGlobals select: [ :each | each isBehavior ]
+]
+
+{ #category : #'private - forked image' }
+ImageWorker >> newlyAddedGlobals [
+	"Return the newly added globals since the last #recordSystemGlobals call"
+	^ Smalltalk globals values \ systemGlobals
+]
+
 { #category : #private }
 ImageWorker >> readForkedImageResult [
 	"The result is a serialized Array with the result at the first position, and a boolean to indicate whether the result is an exception or not."
@@ -139,6 +153,12 @@ ImageWorker >> readForkedImageResult [
 	result second 
 		ifTrue: [ self resignalRemoteError: result first ]
 		ifFalse: [ ^ result first ]
+]
+
+{ #category : #'private - forked image' }
+ImageWorker >> recordSystemGlobals [
+	"Store all the classes from the image for making #newlyAddedGlobals work"
+	systemGlobals := Smalltalk globals values asSet.
 ]
 
 { #category : #private }
@@ -200,8 +220,9 @@ ImageWorker >> serialize: anObject [
 	
 	"use a custom serializer that also serializes newly created classes"
 	serializer := FLSerializer newDefault.
+	self inform: self newlyAddedBehaviors.
 	serializer analyzer 
-		considerInternalAllBehaviors: { self newlyAddedClasses }.
+		considerInternalAllBehaviors: self newlyAddedBehaviors.
 	serializer
 		serialize: anObject
 		toFileNamed: self resultFile fullName.
