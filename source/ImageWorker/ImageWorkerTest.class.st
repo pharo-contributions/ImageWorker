@@ -46,6 +46,15 @@ ImageWorkerTest >> testReturnInteger [
 ]
 
 { #category : #tests }
+ImageWorkerTest >> testReturnNewClass [
+	| newClass className |
+	className := #'ImageWorkerTest_newclass'.
+	newClass := self do: [ Object subclass: className ].
+	self assert: newClass name equals: className.
+	self deny: (Smalltalk includesKey: className)
+]
+
+{ #category : #tests }
 ImageWorkerTest >> testReturnString [
 	self assert: (self do: ['1.5']) equals: '1.5'.
 ]

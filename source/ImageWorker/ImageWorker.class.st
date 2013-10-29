@@ -89,6 +89,20 @@ ImageWorker >> forkedImageFile [
 	^ self baseFile, Smalltalk image imageSuffix
 ]
 
+{ #category : #private }
+ImageWorker >> handleForkedImageResultWithExitStatus: anInteger [ 
+	"This method handles the case where the external image failed.
+	There are 2 possibilities:
+	1. the external image exited/crashed and no result was produced
+	2. the external image had problems serializing the result but still produced a result file with the serialization error"
+	
+	
+	self resultFile exists
+		ifFalse: [ Error signal: 'External Image Failed: ', anInteger asString ].
+		
+	^ self readForkedImageResult
+]
+
 { #category : #logging }
 ImageWorker >> inform: anObject [
 	VTermOutputDriver stdout 
@@ -179,12 +193,30 @@ ImageWorker >> runSafely: aBlock [
 ]
 
 { #category : #'private - forked image' }
+ImageWorker >> serialize: anObject [
+	| serializer |
+	
+	self resultFile ensureDelete.
+	
+	"use a custom serializer that also serializes newly created classes"
+	serializer := FLSerializer newDefault.
+	serializer analyzer 
+		considerInternalAllBehaviors: { self newlyAddedClasses }.
+	serializer
+		serialize: anObject
+		toFileNamed: self resultFile fullName.
+	
+]
+
+{ #category : #'private - forked image' }
 ImageWorker >> serializeResult: result isError: isError [
 	[
-		{ result. isError } serializeToFileNamed: self resultFile fullName 
+		self serialize: { result. isError }.
 	] on: Error do: [ :error |
-		self inform: 'Could not serialize result ', error messageText.
-		error pass ]
+		self inform: 'Could not serialize result: ', error messageText.
+		[ 
+			self serialize: { error freezeUpTo: thisContext. true }.
+		] on: Error do: [ :anotherError| Exit signalFailure ]]
 ]
 
 { #category : #'private - forked image' }
@@ -247,5 +279,6 @@ ImageWorker >> waitForForkedImage [
 	[ forkedImageProcess isComplete ] whileFalse: [ delay wait ].
 
 	forkedImageProcess succeeded
-		ifFalse: [ Error signal: 'External Image Failed: ', forkedImageProcess exitStatus asString ]
+		ifFalse: [ 
+			self handleForkedImageResultWithExitStatus: forkedImageProcess exitStatus ]
 ]
