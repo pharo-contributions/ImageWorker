@@ -15,7 +15,8 @@ Class {
 		'block',
 		'session',
 		'forkedImageProcess',
-		'systemGlobals'
+		'systemGlobals',
+		'timeoutBlock'
 	],
 	#category : #ImageWorker
 }
@@ -24,6 +25,23 @@ Class {
 ImageWorker class >> do: aBlock [
 	^ self new 
 		block: aBlock;
+		value
+]
+
+{ #category : #api }
+ImageWorker class >> do: aBlock within: aTimeoutDuration [
+	^ self new 
+		block: aBlock;
+		timeout: aTimeoutDuration;
+		value
+]
+
+{ #category : #api }
+ImageWorker class >> do: aBlock within: aTimeoutDuration onTimeout: anErrorBlock [
+	^ self new 
+		block: aBlock;
+		timeout: aTimeoutDuration;
+		timeoutBlock: anErrorBlock;
 		value
 ]
 
@@ -118,6 +136,7 @@ ImageWorker >> initialize [
 	super initialize.
 	baseFile :=  Time primUTCMicrosecondsClock  asString asFileReference / Smalltalk imageFile nextVersion basenameWithoutExtension.
 	timeout := 20 minutes.
+	timeoutBlock := [ :error | error signal ]
 ]
 
 { #category : #testing }
@@ -194,8 +213,7 @@ ImageWorker >> resultFile [
 { #category : #private }
 ImageWorker >> runForkedImage [
 	[[ self waitForForkedImage ]
-		valueWithin: self timeout onTimeout: [ 
-			Error signal: 'Timeout Occurred' ].
+		valueWithin: self timeout onTimeout: timeoutBlock.
 		^ self readForkedImageResult
 	] ensure: [ self cleanUp ]
 ]
@@ -271,6 +289,16 @@ ImageWorker >> timeout [
 { #category : #accessing }
 ImageWorker >> timeout: anObject [
 	timeout := anObject asDuration
+]
+
+{ #category : #accessing }
+ImageWorker >> timeoutBlock [
+	^ timeoutBlock
+]
+
+{ #category : #accessing }
+ImageWorker >> timeoutBlock: aBlock [
+	timeoutBlock := aBlock
 ]
 
 { #category : #action }
