@@ -168,7 +168,7 @@ ConfigurationOfImageWorker >> fuelMetalevel: spec [
 	"Dependencies"
 	spec project: 'FuelMetalevel' with: [
 		spec 
-			repository: 'http://smalltalkhub.com/Pharo/Fuel/main';
+			repository: 'http://smalltalkhub.com/mc/Pharo/Fuel/main';
 			className: 'ConfigurationOfFuel';
 			loads: #(FuelMetalevel)].
 ]
