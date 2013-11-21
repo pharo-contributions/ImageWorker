@@ -239,10 +239,11 @@ ImageWorker >> serialize: anObject [
 	
 	"use a custom serializer that also serializes newly created classes"
 	serializer := FLSerializer newDefault.
-	self inform: newClasses.
+	
 	serializer analyzer 
 		considerInternalAllBehaviors: newClasses.
 	serializer
+		"Even so they newClasses are specified above, they have to be includede explitely in the output"
 		serialize: anObject, newClasses
 		toFileNamed: self resultFile fullName.
 	
