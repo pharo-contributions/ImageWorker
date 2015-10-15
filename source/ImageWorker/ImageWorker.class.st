@@ -151,8 +151,10 @@ ImageWorker >> name [
 
 { #category : #'private - forked image' }
 ImageWorker >> newlyAddedBehaviors [
-	"Return the newly added globals since the last #recordSystemGlobals call"
-	^  self newlyAddedGlobals select: [ :each | each isBehavior ]
+	"Return the newly added behaviors (non-obsolete classes and traits) since the last #recordSystemGlobals call"
+
+	^ self newlyAddedGlobals select: [ :each |
+			(each isBehavior or: [ each isTrait ]) and: [ each isObsolete not ] ]
 ]
 
 { #category : #'private - forked image' }
