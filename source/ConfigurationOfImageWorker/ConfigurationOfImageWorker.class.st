@@ -235,11 +235,8 @@ ConfigurationOfImageWorker >> versionDevelopment: spec [
 		spec blessing: #development.
 		spec repository: 'http://smalltalkhub.com/mc/PharoExtras/ImageWorker/main'.
 	
-		"
-		ErwanDouaille
-		CamilloBruni"
 		spec
-			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.25' ].
+			package:  'ImageWorker' with: 'ImageWorker-MartinDias.26' ].
 ]
 
 { #category : #versions }
