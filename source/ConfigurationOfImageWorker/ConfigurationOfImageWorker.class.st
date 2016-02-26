@@ -247,7 +247,7 @@ ConfigurationOfImageWorker >> version103: spec [
 		spec blessing: #release.
 	
 		spec
-			project: 'FuelMetalevel' with: '2.0.0';
+			project: 'FuelMetalevel' with: '2.0.1';
 			package: 'ImageWorker' with: 'ImageWorker-MarianoMartinezPeck.27' ].
 ]
 
