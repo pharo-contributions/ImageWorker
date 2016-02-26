@@ -232,7 +232,7 @@ ConfigurationOfImageWorker >> version102: spec [
 	<version: '1.02' imports: #('1.01-baseline')>
 
 	spec for: #pharo do: [	
-		spec blessing: #baseline.
+		spec blessing: #release.
 	
 		spec
 			project: 'FuelMetalevel' with: '2.0.0';
