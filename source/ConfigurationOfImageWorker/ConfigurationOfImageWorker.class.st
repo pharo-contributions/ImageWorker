@@ -208,7 +208,7 @@ ConfigurationOfImageWorker >> seamless: spec [
 ConfigurationOfImageWorker >> stable: spec [
 	<symbolicVersion: #stable >
 	
-	spec for: #'common' version: '1.02'.
+	spec for: #'common' version: '1.03'.
 
 ]
 
@@ -237,6 +237,18 @@ ConfigurationOfImageWorker >> version102: spec [
 		spec
 			project: 'FuelMetalevel' with: '2.0.0';
 			package: 'ImageWorker' with: 'ImageWorker-CamilloBruni.23' ].
+]
+
+{ #category : #versions }
+ConfigurationOfImageWorker >> version103: spec [
+	<version: '1.03' imports: #('1.01-baseline')>
+
+	spec for: #pharo do: [	
+		spec blessing: #release.
+	
+		spec
+			project: 'FuelMetalevel' with: '2.0.0';
+			package: 'ImageWorker' with: 'ImageWorker-MarianoMartinezPeck.27' ].
 ]
 
 { #category : #versions }
