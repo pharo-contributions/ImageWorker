@@ -170,7 +170,6 @@ ConfigurationOfImageWorker >> fuelMetalevel: spec [
 		spec 
 			repository: 'http://smalltalkhub.com/mc/Pharo/Fuel/main';
 			className: 'ConfigurationOfFuel';
-			version: '2.0.0';
 			loads: #('FuelMetalevel')].
 ]
 
@@ -209,7 +208,7 @@ ConfigurationOfImageWorker >> seamless: spec [
 ConfigurationOfImageWorker >> stable: spec [
 	<symbolicVersion: #stable >
 	
-	spec for: #'common' version: '1.01'.
+	spec for: #'common' version: '1.02'.
 
 ]
 
@@ -226,6 +225,18 @@ ConfigurationOfImageWorker >> version101: spec [
 		CamilloBruni"
 		spec
 			package:  'ImageWorker' with: 'ImageWorker-CamilloBruni.23' ].
+]
+
+{ #category : #versions }
+ConfigurationOfImageWorker >> version102: spec [
+	<version: '1.02' imports: #('1.01-baseline')>
+
+	spec for: #pharo do: [	
+		spec blessing: #baseline.
+	
+		spec
+			project: 'FuelMetalevel' with: '2.0.0';
+			package: 'ImageWorker' with: 'ImageWorker-CamilloBruni.23' ].
 ]
 
 { #category : #versions }
