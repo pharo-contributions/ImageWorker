@@ -117,6 +117,30 @@ ConfigurationOfImageWorker >> baseline101: spec [
 ]
 
 { #category : #baselines }
+ConfigurationOfImageWorker >> baseline102: spec [
+	<version: '1.02-baseline'>
+
+	spec for: #pharo do: [	
+		spec blessing: #baseline.
+		spec repository: 'http://smalltalkhub.com/mc/PharoExtras/ImageWorker/main'.
+		
+		self 
+			seamless: spec;
+			"fuelMetalevel: spec;"
+			commandShell: spec.
+			
+		spec
+			package: 'FuelMetalevel' with: [ 
+				spec repository: 'http://smalltalk.com/mc/Pharo/Fuel/main' ];
+			package: 'ImageWorker' with: [ 
+				spec requires: #('CommandShell' 'FuelMetalevel')].
+			
+		spec 
+			group: 'default' with: #('ImageWorker');
+			group: 'full'    with: #('ImageWorker')].
+]
+
+{ #category : #baselines }
 ConfigurationOfImageWorker >> baselineDevelopment: spec [
 	<version: 'development-baseline'>
 
@@ -208,7 +232,7 @@ ConfigurationOfImageWorker >> seamless: spec [
 ConfigurationOfImageWorker >> stable: spec [
 	<symbolicVersion: #stable >
 	
-	spec for: #'common' version: '1.03'.
+	spec for: #'common' version: '1.04'.
 
 ]
 
@@ -248,6 +272,19 @@ ConfigurationOfImageWorker >> version103: spec [
 	
 		spec
 			project: 'FuelMetalevel' with: '2.0.1';
+			package: 'ImageWorker' with: 'ImageWorker-MarianoMartinezPeck.27' ].
+]
+
+{ #category : #versions }
+ConfigurationOfImageWorker >> version104: spec [
+	<version: '1.04' imports: #('1.02-baseline')>
+
+	spec for: #pharo do: [	
+		spec blessing: #release.
+		spec description: 'Workaround to be sure we have just what we need in image worker'.
+	
+		spec
+			package: 'FuelMetalevel' with: 'FuelMetalevel-MarianoMartinezPeck.81';
 			package: 'ImageWorker' with: 'ImageWorker-MarianoMartinezPeck.27' ].
 ]
 
