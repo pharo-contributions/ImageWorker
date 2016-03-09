@@ -232,7 +232,7 @@ ConfigurationOfImageWorker >> seamless: spec [
 ConfigurationOfImageWorker >> stable: spec [
 	<symbolicVersion: #stable >
 	
-	spec for: #'common' version: '1.04'.
+	spec for: #'common' version: '1.05'.
 
 ]
 
@@ -286,6 +286,19 @@ ConfigurationOfImageWorker >> version104: spec [
 		spec
 			package: 'FuelMetalevel' with: 'FuelMetalevel-MarianoMartinezPeck.81';
 			package: 'ImageWorker' with: 'ImageWorker-MarianoMartinezPeck.27' ].
+]
+
+{ #category : #versions }
+ConfigurationOfImageWorker >> version105: spec [
+	<version: '1.05' imports: #('1.02-baseline')>
+
+	spec for: #pharo do: [	
+		spec blessing: #release.
+		spec description: 'Workaround to fix the timeout problem (attempt)'.
+	
+		spec
+			package: 'FuelMetalevel' with: 'FuelMetalevel-MarianoMartinezPeck.81';
+			package: 'ImageWorker' with: 'ImageWorker-EstebanLorenzano.28' ].
 ]
 
 { #category : #versions }
