@@ -131,7 +131,7 @@ ConfigurationOfImageWorker >> baseline102: spec [
 			
 		spec
 			package: 'FuelMetalevel' with: [ 
-				spec repository: 'http://smalltalk.com/mc/Pharo/Fuel/main' ];
+				spec repository: 'http://smalltalkhub.com/mc/Pharo/Fuel/main' ];
 			package: 'ImageWorker' with: [ 
 				spec requires: #('CommandShell' 'FuelMetalevel')].
 			
