@@ -37,11 +37,11 @@ ImageWorker class >> do: aBlock within: aTimeoutDuration [
 ]
 
 { #category : #api }
-ImageWorker class >> do: aBlock within: aTimeoutDuration onTimeout: anErrorBlock [
+ImageWorker class >> do: aBlock within: aTimeoutDuration onTimeout: anZeroArgumentsBlock [
 	^ self new 
 		block: aBlock;
 		timeout: aTimeoutDuration;
-		timeoutBlock: anErrorBlock;
+		timeoutBlock: anZeroArgumentsBlock;
 		value
 ]
 
@@ -136,7 +136,7 @@ ImageWorker >> initialize [
 	super initialize.
 	baseFile :=  Time primUTCMicrosecondsClock  asString asFileReference / Smalltalk imageFile nextVersion basenameWithoutExtension.
 	timeout := 20 minutes.
-	timeoutBlock := [ :error | error signal ]
+	timeoutBlock := [ ].
 ]
 
 { #category : #testing }
@@ -306,8 +306,8 @@ ImageWorker >> timeoutBlock [
 ]
 
 { #category : #accessing }
-ImageWorker >> timeoutBlock: aBlock [
-	timeoutBlock := aBlock
+ImageWorker >> timeoutBlock: anZeroArgumentsBlock [
+	timeoutBlock := anZeroArgumentsBlock
 ]
 
 { #category : #action }
