@@ -232,7 +232,7 @@ ConfigurationOfImageWorker >> seamless: spec [
 ConfigurationOfImageWorker >> stable: spec [
 	<symbolicVersion: #stable >
 	
-	spec for: #'common' version: '1.05'.
+	spec for: #'common' version: '1.06'.
 
 ]
 
@@ -298,6 +298,19 @@ ConfigurationOfImageWorker >> version105: spec [
 	
 		spec
 			package: 'FuelMetalevel' with: 'FuelMetalevel-MarianoMartinezPeck.81';
+			package: 'ImageWorker' with: 'ImageWorker-EstebanLorenzano.28' ].
+]
+
+{ #category : #versions }
+ConfigurationOfImageWorker >> version106: spec [
+	<version: '1.06' imports: #('1.02-baseline')>
+
+	spec for: #pharo do: [	
+		spec blessing: #release.
+		spec description: 'Fixes class and slot serialization'.
+	
+		spec
+			package: 'FuelMetalevel' with: 'FuelMetalevel-MaxLeske.82';
 			package: 'ImageWorker' with: 'ImageWorker-EstebanLorenzano.28' ].
 ]
 
