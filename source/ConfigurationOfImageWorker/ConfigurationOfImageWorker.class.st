@@ -232,7 +232,7 @@ ConfigurationOfImageWorker >> seamless: spec [
 ConfigurationOfImageWorker >> stable: spec [
 	<symbolicVersion: #stable >
 	
-	spec for: #'common' version: '1.06'.
+	spec for: #'common' version: '1.07'.
 
 ]
 
@@ -311,6 +311,19 @@ ConfigurationOfImageWorker >> version106: spec [
 	
 		spec
 			package: 'FuelMetalevel' with: 'FuelMetalevel-MaxLeske.82';
+			package: 'ImageWorker' with: 'ImageWorker-EstebanLorenzano.28' ].
+]
+
+{ #category : #versions }
+ConfigurationOfImageWorker >> version107: spec [
+	<version: '1.07' imports: #('1.02-baseline')>
+
+	spec for: #pharo do: [	
+		spec blessing: #release.
+		spec description: 'Ignore anonymous behaviors'.
+	
+		spec
+			package: 'FuelMetalevel' with: 'FuelMetalevel-MaxLeske.83';
 			package: 'ImageWorker' with: 'ImageWorker-EstebanLorenzano.28' ].
 ]
 
