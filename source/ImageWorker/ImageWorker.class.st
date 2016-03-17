@@ -3,8 +3,8 @@ I run a block in a separate image and communicate the value back using OSProcess
 Exceptions are properly serialized in the remote image and locally resignalled, as if the block were evaluated locally.
 
 Example:
-	ImageWorker do: [ 1 + 2 ].
-	ImageWorker do: [ 1 / 0 ].
+	CIImageWorkder do: [ 1 + 2 ].
+	CIImageWorker do: [ 1 / 0 ].
 "
 Class {
 	#name : #ImageWorker,
@@ -332,12 +332,11 @@ ImageWorker >> value [
 { #category : #private }
 ImageWorker >> waitForForkedImage [
 	| delay |
-	
 	forkedImageProcess := OSProcess command: self forkedImageCommand.
 	delay := 50 milliSeconds asDelay.
-	[ forkedImageProcess isComplete ] whileFalse: [ delay wait ].
-
+	[ forkedImageProcess update: #runState.
+	forkedImageProcess isComplete ] whileFalse: [ delay wait ].
 	forkedImageProcess succeeded
-		ifFalse: [ 
-			self handleForkedImageResultWithExitStatus: forkedImageProcess exitStatus ]
+		ifFalse: [ self
+				handleForkedImageResultWithExitStatus: forkedImageProcess exitStatus ]
 ]
