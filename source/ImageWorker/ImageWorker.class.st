@@ -160,7 +160,7 @@ ImageWorker >> newlyAddedBehaviors [
 	"Collect superclasses so that instance variable modifications in superclasses are also
 	serialized. We need this because the format of a superclass may have changed which will
 	result in a format mismatch when materializing."
-	limit := { Trait. Object. TestCase }.
+	limit := { Trait. Object. TestCase. nil }.
 	superclasses := OrderedCollection new.
 	(newClasses do: [ :class |
 		| currentClass |
