@@ -232,7 +232,7 @@ ConfigurationOfImageWorker >> seamless: spec [
 ConfigurationOfImageWorker >> stable: spec [
 	<symbolicVersion: #stable >
 	
-	spec for: #'common' version: '1.08'.
+	spec for: #'common' version: '1.09'.
 
 ]
 
@@ -335,6 +335,19 @@ ConfigurationOfImageWorker >> version108: spec [
 		spec blessing: #release.
 		spec description: 'fixes issue 18502
 * collect the superclasses of newly added behaviours too when serializing the result in the forked image. This ensures that changes to instance variables in the superclasses will be reflected in the materializing image'.
+	
+		spec
+			package: 'FuelMetalevel' with: 'FuelMetalevel-MaxLeske.83';
+			package: 'ImageWorker' with: 'ImageWorker-MaxLeske.31' ].
+]
+
+{ #category : #versions }
+ConfigurationOfImageWorker >> version109: spec [
+	<version: '1.09' imports: #('1.02-baseline')>
+
+	spec for: #pharo do: [	
+		spec blessing: #release.
+		spec description: 'Should fix issues with weird globals where #superclass will answer nil. In such a case serialization would fail.'.
 	
 		spec
 			package: 'FuelMetalevel' with: 'FuelMetalevel-MaxLeske.83';
