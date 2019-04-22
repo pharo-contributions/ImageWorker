@@ -134,7 +134,7 @@ ImageWorker >> inform: anObject [
 ImageWorker >> initialize [
 
 	super initialize.
-	baseFile :=  Time primUTCMicrosecondsClock  asString asFileReference / Smalltalk imageFile nextVersion basenameWithoutExtension.
+	baseFile := (Time primUTCMicrosecondsClock  asString asFileReference / Smalltalk imageFile nextVersion basenameWithoutExtension) asAbsolute. 
 	timeout := 20 minutes.
 	timeoutBlock := [ ].
 ]
