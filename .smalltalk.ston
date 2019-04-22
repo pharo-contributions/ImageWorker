@@ -1,0 +1,9 @@
+SmalltalkCISpec {
+  #loading : [
+      SCIMetacelloLoadSpec {
+          #baseline : 'ImageWorker',
+          #directory : 'source',
+          #platforms : [ #pharo ]
+      }
+  ]
+}

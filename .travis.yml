@@ -1,0 +1,17 @@
+language: smalltalk
+sudo: required
+
+os:
+- linux
+
+
+smalltalk:
+- Pharo-7.0
+- Pharo64-7.0
+
+script:
+- $SMALLTALK_CI_HOME/run.sh
+
+after_script:
+ - pip install --user benchupload && python -mbenchupload --dir=$SMALLTALK_CI_BUILD
+
