@@ -8,6 +8,7 @@ os:
 smalltalk:
 - Pharo-7.0
 - Pharo64-7.0
+- Pharo64-8.0
 
 script:
 - $SMALLTALK_CI_HOME/run.sh
