@@ -10,7 +10,6 @@ BaselineOfImageWorker >> baseline: spec [
 
 	spec for: #pharo do: [			
 		self 
-			seamless: spec;
 			commandShell: spec;
 			fuelMetalevel: spec.
 			
@@ -18,9 +17,8 @@ BaselineOfImageWorker >> baseline: spec [
 			package: 'ImageWorker' with: [ 
 				spec requires: #('CommandShell' 'Fuel')].
 			
-		spec 
-			group: 'default' with: #('ImageWorker');
-			group: 'full'    with: #('ImageWorker')].
+		spec
+			group: 'default' with: #('ImageWorker') ].
 ]
 
 { #category : #'external projects' }
@@ -38,22 +36,4 @@ BaselineOfImageWorker >> fuelMetalevel: spec [
 		spec 
 			repository: 'github://theseion/Fuel/repository';
 			loads: #( 'Fuel-Metalevel' ) ]
-]
-
-{ #category : #'external projects' }
-BaselineOfImageWorker >> osProcess: spec [
-	spec project: 'OSProcess' with: [
-		spec
-			repository: 'http://www.squeaksource.com/MetacelloRepository';
-			className: 'ConfigurationOfOSProcess';
-			version: #stable ].
-]
-
-{ #category : #'external projects' }
-BaselineOfImageWorker >> seamless: spec [
-	
-	"Dependencies"
-		spec
-			repository: 'http://ss3.gemtalksystems.com/ss/Seamless';
-			package:  'Seamless'  .
 ]
