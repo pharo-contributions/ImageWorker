@@ -51,7 +51,7 @@ ImageWorkerTest >> testReturnNewClass [
 	className := #'ImageWorkerTest_newclass'.
 	newClass := self do: [ Object subclass: className ].
 	self assert: newClass name equals: className.
-	self deny: (Smalltalk includesKey: className)
+	self deny: (self class environment includesKey: className)
 ]
 
 { #category : #tests }
