@@ -55,6 +55,15 @@ ImageWorkerTest >> testReturnNewClass [
 ]
 
 { #category : #tests }
+ImageWorkerTest >> testReturnNewTrait [
+	| newTrait className |
+	className := #'ImageWorkerTest_newtrait'.
+	newTrait := self do: [ Trait named: className ].
+	self assert: newTrait name equals: className.
+	self deny: (self class environment includesKey: className)
+]
+
+{ #category : #tests }
 ImageWorkerTest >> testReturnString [
 	self assert: (self do: ['1.5']) equals: '1.5'.
 ]
