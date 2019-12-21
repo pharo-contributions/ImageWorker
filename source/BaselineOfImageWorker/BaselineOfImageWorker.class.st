@@ -34,6 +34,6 @@ BaselineOfImageWorker >> commandShell: spec [
 BaselineOfImageWorker >> fuelMetalevel: spec [
 	spec baseline: 'Fuel' with: [ 
 		spec 
-			repository: 'github://theseion/Fuel/repository';
+			repository: 'github://theseion/Fuel:3.0.1/repository';
 			loads: #( 'Fuel-Metalevel' ) ]
 ]
