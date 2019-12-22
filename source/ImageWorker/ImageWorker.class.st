@@ -18,7 +18,7 @@ Class {
 		'systemGlobals',
 		'timeoutBlock'
 	],
-	#category : #ImageWorker
+	#category : #'ImageWorker-Core'
 }
 
 { #category : #api }
@@ -141,7 +141,7 @@ ImageWorker >> inform: anObject [
 		lf.
 ]
 
-{ #category : #initialize }
+{ #category : #initialization }
 ImageWorker >> initialize [
 
 	super initialize.
@@ -338,7 +338,7 @@ ImageWorker >> timeoutBlock: anZeroArgumentsBlock [
 
 { #category : #action }
 ImageWorker >> updateSession [
-	session := Smalltalk session.
+	session := SessionManager default currentSession
 ]
 
 { #category : #action }

@@ -1,7 +1,7 @@
 Class {
 	#name : #ImageWorkerTest,
 	#superclass : #TestCase,
-	#category : #ImageWorker
+	#category : #'ImageWorker-Tests'
 }
 
 { #category : #helper }
